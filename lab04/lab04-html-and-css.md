@@ -22,7 +22,7 @@ Develop a static webpage with the user interface to display the list of Films in
     - An element to create and add a new film to the Film Library. It is represented by the "+" symbol and positioned in the bottom right corner of the page.
 - Each film in the list is displayed as follows:
     - The film's title.
-    - An element indicating whether the film is a favorite (☑) or not (☐).
+    - An element indicating whether the film is a favorite (❤︎) or not (♡).
     - The film's watch date is in the format "Month D, Yr." (e.g., "March 14, 2026"), if available.
     - The film's rating is expressed using one to five stars. If no rating is assigned, display five empty stars.
 
