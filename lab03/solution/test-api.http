@@ -103,7 +103,8 @@ content-type: application/json
     "wrong_title_field": "Guardians of the Galaxy Vol.3",
     "favorite": "I really liked it!",
     "watchDate": "May the 15th, 2023",
-    "rating": 35
+    "rating": 35,
+    "userID": 1
 }
 ###
 
