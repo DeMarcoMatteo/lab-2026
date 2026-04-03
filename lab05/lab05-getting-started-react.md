@@ -8,7 +8,7 @@ In this lab, you will begin developing the front end of your web-based Film Libr
 
 ## 1. Create and configure the React application
 
-Create a new React app using Vite. Then, use the React-enabled version of Bootstrap and its components to structure the front end of your web-based Film Library. You can find the documentation at <https://react-bootstrap.github.io/>.
+Create a new React app using Vite. Then, use the React-enabled version of Bootstrap and its components to structure the front end of your web-based Film Library. You can find the documentation at <https://react-bnpm install react-bootstrap bootstrapootstrap.github.io/>.
 
 Organize the page using React functional components stored in different files. Your application, for example, might have distinct components to manage the navigation bar, the sidebar, and the list of films.
 
