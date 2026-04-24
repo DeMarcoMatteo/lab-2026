@@ -47,6 +47,7 @@ function App() {
     const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
 
     const [films, setFilms] = useState(INITIAL_FILMS);
+    const [filmToEdit, setFilmToEdit] = useState(null);
 
     // This is not optimal - better ways will be introduced in the upcoming labs
     const visibleFilms = films.filter(filters[activeFilter].filterFunction);
@@ -61,6 +62,24 @@ function App() {
         );
 
         setFilms((currentFilms) => [...currentFilms, nextFilm]);
+    };
+
+    const editFilm=(film)=>{
+        setFilms((currentFilms) => {
+            return currentFilms.map(f => {
+                if(f.id===film.id) {
+                    return new Film(
+                        f.id,
+                        film.title,
+                        film.favorite === true || film.favorite === 'on',
+                        film.watchDate || null,
+                        film.rating === '' || film.rating === null || film.rating === undefined ? null : Number(film.rating)
+                    );
+                } else {
+                    return f;
+                }
+            });
+        });
     };
 
     const [mode, setMode] = useState('view');
@@ -80,12 +99,17 @@ function App() {
                     </Collapse>
                     <Col md={9} className="pt-3">
                         <h1><span id="filter-title">{filters[activeFilter].label}</span> films</h1>
-                        <FilmList films={visibleFilms}/>
+                        <FilmList films={visibleFilms} setMode={setMode} setFilmToEdit={setFilmToEdit}/>
                         <div className="mt-4">
                             {mode === 'add' && <FilmForm addFilm={(film) => {
                                 addFilm(film);
                                 setMode('view');
                             }}/>}
+                            {mode === 'edit' && <FilmForm editFilm={(film) => {
+                                editFilm(film);
+                                setFilmToEdit(null);
+                                setMode('view');
+                            }} initialFilm={filmToEdit}/>}
                         </div>
                     </Col>
                 </Row>

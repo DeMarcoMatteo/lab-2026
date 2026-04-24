@@ -1,13 +1,14 @@
 import { useActionState } from "react";
 import { Alert, Form } from "react-bootstrap";
+import dayjs from "dayjs";
 
 function FilmForm(props){
 
     const initialState = {
-        title: '',
-        favorite: false,
-        watchDate: null,
-        rating: 0
+        title: props.initialFilm?.title ?? '',
+        favorite: props.initialFilm?.favorite ?? false,
+        watchDate: props.initialFilm?.watchDate ? props.initialFilm.watchDate.format('YYYY-MM-DD') : '',
+        rating: props.initialFilm?.rating ?? ''
     };
 
     const handleSubmit = async (prevState, formData) => {
@@ -23,7 +24,17 @@ function FilmForm(props){
             return film;
         }
 
-        props.addFilm(film);
+       
+        if(film.watchDate && dayjs(film.watchDate).isAfter(dayjs())) {
+            film.error='You don\'t have a time machine, watch date must be in the past';
+            return film;
+        }
+
+        if (props.editFilm) {
+            props.editFilm({ ...film, id: props.initialFilm?.id });
+        } else {
+            props.addFilm(film);
+        }
         return initialState;
     }
 
@@ -35,22 +46,24 @@ function FilmForm(props){
         <Form action={formAction} className="film-form">
             <Form.Group className="mb-2">    
                 <Form.Label>Title</Form.Label>
-                <Form.Control size="sm" name="title" type="text"  placeholder="Enter title">   
+                <Form.Control size="sm" name="title" type="text" defaultValue={state.title} placeholder="Enter title">   
                 </Form.Control>
             </Form.Group>
             <Form.Group className="mb-2">
                 <Form.Label>Favorite</Form.Label>
-                <Form.Check name="favorite" type="checkbox" label="Mark as favorite"/>
+                <Form.Check name="favorite" type="checkbox" defaultChecked={state.favorite} label="Mark as favorite"/>
             </Form.Group>
             <Form.Group className="mb-2">
                 <Form.Label>Watch date</Form.Label>
-                <Form.Control size="sm" name="watchDate" type="date"/>
+                <Form.Control size="sm" name="watchDate" type="date" defaultValue={state.watchDate}/>
             </Form.Group>
             <Form.Group className="mb-2">
                 <Form.Label>Rating</Form.Label>
-                <Form.Control size="sm" name="rating" type="number"/>
+                <Form.Control size="sm" name="rating" type="number" defaultValue={state.rating}/>
             </Form.Group>
-            <button type="submit" className="btn btn-primary">Add</button>
+            {props.editFilm && <button type="submit" className="btn btn-success">Save</button>}
+            {!props.editFilm && <button type="submit" className="btn btn-primary">Add</button>}
+
         </Form>
         </>
     );

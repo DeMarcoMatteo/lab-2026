@@ -3,12 +3,11 @@ import {Col, Row} from 'react-bootstrap/';
 
 import PropTypes from 'prop-types';
 import {ListGroup, ListGroupItem} from "react-bootstrap";
-
+import React from "react";
 function FilmList(props) {
-    const {films} = props;
 
     return (<ListGroup id="films-list" variant="flush">
-        {films.map((film) => <FilmInList filmData={film} key={film.id}/>)}
+        {props.films.map((film) => <FilmInList filmData={film} setMode={props.setMode} setFilmToEdit={props.setFilmToEdit} key={film.id}/>) }
     </ListGroup>);
 }
 
@@ -16,12 +15,18 @@ FilmList.propTypes = {
     films: PropTypes.array.isRequired,
 };
 
-function FilmInList({filmData}) {
+function FilmInList(props) {
+
+    const handleEdit = (filmData) => {
+        props.setFilmToEdit(filmData);
+        props.setMode('edit');
+    };
+
     return (<ListGroupItem>
         <Row className="gy-2">
 
             <Col xs={6} xl={3} className="favorite-title d-flex gap-2 align-items-center">
-                {filmData.title}
+                {props.filmData.title}
                 <div className="d-xl-none actions">
                     <i className="bi bi-pencil"></i>
                     <i className="bi bi-trash"></i>
@@ -30,21 +35,21 @@ function FilmInList({filmData}) {
             <Col xs={6} xl={3} className="text-end text-xl-center">
             <span className="custom-control custom-checkbox">
               <span className="custom-control custom-checkbox">
-                          <input type="checkbox" className="custom-control-input" defaultChecked={filmData.favorite}/>
+                          <input type="checkbox" className="custom-control-input" defaultChecked={props.filmData.favorite}/>
                           <label className="custom-control-label">Favorite</label>
                         </span>
             </span>
             </Col>
 
             <Col xs={4} xl={3} className="text-xl-center">
-                {filmData.formatWatchDate()}
+                {props.filmData.formatWatchDate()}
             </Col>
             <Col xs={8} xl={3} className="actions-container text-end">
                 <div className="rating">
-                    <Rating rating={filmData.rating} maxStars={5}/>
+                    <Rating rating={props.filmData.rating} maxStars={5}/>
                 </div>
                 <div className="d-none d-xl-flex actions">
-                    <i className="bi bi-pencil"></i>
+                    <i className="bi bi-pencil" onClick={() => handleEdit(props.filmData)}></i>
                     <i className="bi bi-trash"></i>
                 </div>
             </Col>
@@ -53,6 +58,8 @@ function FilmInList({filmData}) {
 
 FilmInList.propTypes = {
     filmData: PropTypes.object.isRequired,
+    setMode: PropTypes.func.isRequired,
+    setFilmToEdit: PropTypes.func.isRequired
 };
 
 function Rating({maxStars, rating}) {
